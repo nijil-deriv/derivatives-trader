@@ -148,7 +148,7 @@ const Statement = observer(({ component_icon }: TStatement) => {
     const prev_action_type = usePrevious(action_type);
     const prev_date_from = usePrevious(date_from);
     const prev_date_to = usePrevious(date_to);
-    const { isDesktop } = useDevice();
+    const { isMobile } = useDevice();
 
     React.useEffect(() => {
         onMount();
@@ -161,7 +161,7 @@ const Statement = observer(({ component_icon }: TStatement) => {
 
     if (error) return <p>{error}</p>;
 
-    const columns: TGetStatementTableColumnsTemplate = getStatementTableColumnsTemplate(currency, isDesktop);
+    const columns: TGetStatementTableColumnsTemplate = getStatementTableColumnsTemplate(currency, !isMobile);
     const columns_map = columns.reduce(
         (map, item) => {
             map[item.col_index as TColIndex] = item;
@@ -233,7 +233,7 @@ const Statement = observer(({ component_icon }: TStatement) => {
                     />
                 ) : (
                     <div className='reports__content'>
-                        {isDesktop ? (
+                        {!isMobile ? (
                             <DataTable
                                 className='statement'
                                 columns={columns}

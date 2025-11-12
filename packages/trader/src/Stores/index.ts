@@ -2,6 +2,8 @@ import { TCoreStores } from '@deriv/stores/types';
 
 import ModulesStore from './Modules';
 
+export { useTraderStore, TraderStoreProvider } from './useTraderStores';
+
 export default class RootStore {
     client: TCoreStores['client'];
     common: TCoreStores['common'];

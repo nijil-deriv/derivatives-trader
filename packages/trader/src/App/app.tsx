@@ -4,8 +4,6 @@ import Loadable from 'react-loadable';
 import type { TCoreStores } from '@deriv/stores/types';
 
 import Routes from 'App/Containers/Routes/routes';
-import TradeFooterExtensions from 'App/Containers/trade-footer-extensions';
-import TradeHeaderExtensions from 'App/Containers/trade-header-extensions';
 import TradeSettingsExtensions from 'App/Containers/trade-settings-extensions';
 import { NetworkStatusToastErrorPopup } from 'Modules/Trading/Containers/toast-popup';
 import ModulesProvider from 'Stores/Providers/modules-providers';
@@ -42,8 +40,6 @@ const App = ({ passthrough }: Apptypes) => {
                 <Routes />
                 <TradeModals />
                 <NetworkStatusToastErrorPopup />
-                <TradeHeaderExtensions store={root_store} />
-                <TradeFooterExtensions />
                 <TradeSettingsExtensions store={root_store} />
             </ModulesProvider>
         </TraderProviders>

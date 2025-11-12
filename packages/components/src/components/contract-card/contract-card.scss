@@ -138,7 +138,7 @@
     }
     &__wrapper {
         margin: 0 1em;
-        max-width: 218px;
+        max-width: 284px;
         width: 100%;
         border-radius: $BORDER_RADIUS;
         transition:
@@ -146,6 +146,7 @@
             opacity 0.25s linear;
         position: relative;
         background: var(--color-surface-primary);
+        border: 1px solid var(--color-surface-border, rgba(0, 0, 0, 0.08));
 
         .currency-badge {
             margin-bottom: 5px;

@@ -134,7 +134,7 @@ export const MobileRowRenderer = ({
             <div className='data-list__row'>
                 <ContractCard.Sell
                     contract_info={contract_info}
-                    is_sell_requested={is_sell_requested}
+                    is_sell_requested={!!is_sell_requested}
                     getCardLabels={getCardLabels}
                     onClickSell={onClickSell}
                 />

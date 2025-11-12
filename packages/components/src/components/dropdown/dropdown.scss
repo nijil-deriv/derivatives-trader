@@ -24,6 +24,10 @@
         justify-content: center;
         background: var(--color-surface-primary);
         border: 1px solid var(--color-interactive-default);
+
+        @include mobile-or-tablet-screen {
+            height: 4rem;
+        }
         &:hover {
             outline: 0;
             border-color: var(--color-interactive-hover);
@@ -276,7 +280,8 @@
         width: 100%;
 
         &:not(.cfd-personal-details-modal__form *):not(.trade-container__multiplier-dropdown):not(
-                .dc-dropdown--left):not(.contract-type-info__dropdown) {
+                .dc-dropdown--left
+            ):not(.contract-type-info__dropdown) {
             margin-top: unset;
         }
 

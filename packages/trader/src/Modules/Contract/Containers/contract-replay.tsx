@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { Div100vhContainer, FadeWrapper, PageOverlay, SwipeableWrapper } from '@deriv/components';
+import { FadeWrapper, PageOverlay } from '@deriv/components';
 import { useFeatureFlags } from '@deriv/api';
 import {
     getContractTypeFeatureFlag,
@@ -17,12 +17,10 @@ import {
 } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { Localize } from '@deriv-com/translations';
-import { useDevice } from '@deriv-com/ui';
 
 import ChartLoader from 'App/Components/Elements/chart-loader';
 import ContractDrawer from 'App/Components/Elements/ContractDrawer';
 
-import { DigitsWidget, InfoBoxWidget } from './contract-replay-widget';
 import ReplayChart from './replay-chart';
 
 type TLocationState = { from_table_row: boolean };
@@ -30,11 +28,10 @@ type TLocationState = { from_table_row: boolean };
 const ContractReplay = observer(({ contract_id }: { contract_id: number }) => {
     const { state } = useLocation<TLocationState>();
     const { common, contract_replay, ui } = useStore();
-    const [swipe_index, setSwipeIndex] = React.useState(0);
     const { contract_store } = contract_replay;
     const { is_market_closed, is_sell_requested, onClickCancel, onClickSell, onMount, onUnmount, is_chart_loading } =
         contract_replay;
-    const { contract_info, contract_update, contract_update_history, is_digit_contract } = contract_store;
+    const { contract_info, contract_update, contract_update_history } = contract_store;
     const { routeBackInApp } = common;
     const {
         is_dark_mode_on: is_dark_theme,
@@ -50,7 +47,6 @@ const ContractReplay = observer(({ contract_id }: { contract_id: number }) => {
         false;
     const [is_visible, setIsVisible] = React.useState(false);
     const history = useHistory();
-    const { isMobile } = useDevice();
 
     React.useEffect(() => {
         const url_array = /[^/]*$/.exec(location.pathname);
@@ -81,10 +77,6 @@ const ContractReplay = observer(({ contract_id }: { contract_id: number }) => {
         }
     }, [is_trade_type_disabled, is_visible, onClickClose]);
 
-    const onChangeSwipeableIndex = (index: number) => {
-        setSwipeIndex(index);
-    };
-
     const is_accumulator = isAccumulatorContract(contract_info.contract_type);
     const is_multiplier = isMultiplierContract(contract_info.contract_type);
     const is_turbos = isTurbosContract(contract_info.contract_type);
@@ -110,72 +102,6 @@ const ContractReplay = observer(({ contract_id }: { contract_id: number }) => {
             toggleHistoryTab={toggleHistoryTab}
         />
     );
-
-    if (isMobile) {
-        return (
-            <FadeWrapper
-                is_visible={is_visible}
-                className='contract-details-wrapper'
-                keyname='contract-details-wrapper'
-            >
-                <NotificationMessages />
-                <PageOverlay
-                    id='dt_contract_replay_container'
-                    header={<Localize i18n_default_text='Contract details' />}
-                    onClickClose={onClickClose}
-                >
-                    <Div100vhContainer
-                        className='trade-container__replay'
-                        height_offset='80px' // * 80px = header + contract details header heights in mobile
-                    >
-                        <div
-                            className={classNames('contract-drawer__mobile-wrapper', {
-                                'contract-drawer__mobile-wrapper--is-multiplier': is_mobile && is_multiplier,
-                            })}
-                            data-testid='dt_contract_drawer_mobile_wrapper'
-                        >
-                            {contract_drawer_el}
-                        </div>
-                        <React.Suspense fallback={<div />}>
-                            <div
-                                className={classNames('replay-chart__container', {
-                                    'replay-chart__container--is-multiplier': is_mobile && is_multiplier,
-                                    'vanilla-trade-chart': is_vanilla,
-                                })}
-                                data-testid='dt_replay_chart_container'
-                            >
-                                <ChartLoader is_dark={is_dark_theme} is_visible={is_chart_loading} />
-                                {is_digit_contract ? (
-                                    <React.Fragment>
-                                        <InfoBoxWidget />
-                                        <SwipeableWrapper
-                                            className='replay-chart__container-swipeable-wrapper'
-                                            data-testid='dt_replay_chart_swipeable_wrapper'
-                                            is_swipe_disabled={swipe_index === 1}
-                                            onChange={
-                                                onChangeSwipeableIndex as React.ComponentProps<
-                                                    typeof SwipeableWrapper
-                                                >['onChange']
-                                            }
-                                        >
-                                            <DigitsWidget />
-                                            <ReplayChart />
-                                        </SwipeableWrapper>
-                                    </React.Fragment>
-                                ) : (
-                                    <ReplayChart
-                                        is_dark_theme_prop={is_dark_theme}
-                                        is_accumulator_contract={is_accumulator}
-                                        is_reset_contract={is_reset_contract}
-                                    />
-                                )}
-                            </div>
-                        </React.Suspense>
-                    </Div100vhContainer>
-                </PageOverlay>
-            </FadeWrapper>
-        );
-    }
 
     return (
         <FadeWrapper is_visible={is_visible} className='contract-details-wrapper' keyname='contract-details-wrapper'>

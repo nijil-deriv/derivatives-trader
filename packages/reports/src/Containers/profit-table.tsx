@@ -71,7 +71,7 @@ const ProfitTable = observer(({ component_icon }: TProfitTable) => {
         onUnmount,
         totals,
     } = profit_table;
-    const { isDesktop } = useDevice();
+    const { isMobile } = useDevice();
 
     React.useEffect(() => {
         initMoment(current_language);
@@ -90,7 +90,7 @@ const ProfitTable = observer(({ component_icon }: TProfitTable) => {
 
     const filter_component = <CompositeCalendar onChange={handleDateChange} from={date_from} to={date_to} />;
 
-    const columns: TGetProfitTableColumnsTemplate = getProfitTableColumnsTemplate(currency, data.length, isDesktop);
+    const columns: TGetProfitTableColumnsTemplate = getProfitTableColumnsTemplate(currency, data.length, !isMobile);
 
     const columns_map = Object.fromEntries(columns.map(column => [column.col_index, column])) as Record<
         TGetProfitTableColumnsTemplate[number]['col_index'],
@@ -178,7 +178,7 @@ const ProfitTable = observer(({ component_icon }: TProfitTable) => {
                     />
                 ) : (
                     <div className='reports__content'>
-                        {isDesktop ? (
+                        {!isMobile ? (
                             <DataTable
                                 className='profit-table'
                                 data_source={data}

@@ -39,7 +39,7 @@ const CompositeCalendar = observer((props: TCompositeCalendar) => {
     const { ui } = useStore();
     const { current_focus, setCurrentFocus } = ui;
     const { onChange, to, from } = props;
-    const { isDesktop } = useDevice();
+    const { isMobile } = useDevice();
     const [show_to, setShowTo] = React.useState(false);
     const [show_from, setShowFrom] = React.useState(false);
     const [list] = React.useState([
@@ -137,7 +137,7 @@ const CompositeCalendar = observer((props: TCompositeCalendar) => {
 
     const isPeriodDisabledFrom = (date: moment.Moment) => date.unix() > to;
 
-    if (isDesktop) {
+    if (!isMobile) {
         return (
             <React.Fragment>
                 <div id='dt_composite_calendar_inputs' className='composite-calendar__input-fields'>

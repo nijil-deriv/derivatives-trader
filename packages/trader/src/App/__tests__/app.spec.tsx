@@ -42,7 +42,6 @@ const mockWs = {
 };
 
 jest.mock('App/Containers/Routes/routes', () => jest.fn(() => <div>Router</div>));
-jest.mock('App/Containers/trade-footer-extensions', () => jest.fn(() => <div>TradeFooterExtensions</div>));
 
 describe('App', () => {
     it('should render the app component', () => {

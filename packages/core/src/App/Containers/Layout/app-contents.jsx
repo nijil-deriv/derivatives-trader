@@ -27,9 +27,7 @@ const AppContents = observer(({ children }) => {
     const { is_logged_in, is_logging_in, should_redirect_user_to_login, setShouldRedirectToLogin } = client;
     const {
         is_app_disabled,
-        is_cashier_visible,
-        is_cfd_page,
-        is_positions_drawer_on,
+        active_sidebar_flyout,
         is_route_modal_on,
         notifyAppInstall,
         setAppContentsScrollRef,
@@ -123,11 +121,10 @@ const AppContents = observer(({ children }) => {
         <div
             id='app_contents'
             className={classNames('app-contents', {
-                'app-contents--show-positions-drawer': is_positions_drawer_on,
+                'app-contents--show-positions-drawer': active_sidebar_flyout,
                 'app-contents--is-disabled': is_app_disabled,
                 'app-contents--is-mobile': isMobile,
                 'app-contents--is-route-modal': is_route_modal_on,
-                'app-contents--is-scrollable': is_cfd_page || is_cashier_visible,
                 'app-contents--is-hidden': has_access_denied_error,
                 'app-contents--is-dtrader-v2': isMobile,
             })}

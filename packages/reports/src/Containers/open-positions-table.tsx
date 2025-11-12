@@ -93,7 +93,7 @@ export const OpenPositionsTable = ({
     row_size,
     totals,
 }: TOpenPositionsTable) => {
-    const { isDesktop } = useDevice();
+    const { isMobile } = useDevice();
 
     return (
         <React.Fragment>
@@ -108,7 +108,7 @@ export const OpenPositionsTable = ({
                 currency && (
                     <div className='reports__content'>
                         <EmptyPlaceholderWrapper component_icon={component_icon} is_empty={is_empty}>
-                            {isDesktop ? (
+                            {!isMobile ? (
                                 <DataTable
                                     className={className}
                                     columns={columns}

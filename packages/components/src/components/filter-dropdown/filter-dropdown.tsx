@@ -34,7 +34,7 @@ const FilterDropdown = ({
     label,
     hide_top_placeholder,
 }: TFilterDropdown) => {
-    const { isDesktop } = useDevice();
+    const { isMobile } = useDevice();
     const [selected_filter, setSelectedFilter] = React.useState(initial_selected_filter ?? filter_list?.[0]?.value);
 
     const onChange = (event: { target: { name: string; value: string } }) => {
@@ -44,7 +44,7 @@ const FilterDropdown = ({
             handleFilterChange(event.target.value);
         }
     };
-    if (isDesktop) {
+    if (!isMobile) {
         return (
             <Dropdown
                 list={filter_list}

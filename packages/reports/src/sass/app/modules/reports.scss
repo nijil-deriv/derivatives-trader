@@ -69,9 +69,12 @@ $side-padding: 1.2em;
     }
     &__content {
         width: 100%;
+        max-width: 100vw;
         display: flex;
         flex: 1;
         flex-direction: column;
+        overflow: auto;
+
         @include desktop-screen {
             overflow: visible;
         }

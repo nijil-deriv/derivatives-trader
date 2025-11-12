@@ -1,16 +1,14 @@
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
-import classNames from 'classnames';
 
 import { DataList, Money, PositionsDrawerCard, Text } from '@deriv/components';
-import { LegacyMinimize2pxIcon } from '@deriv/quill-icons';
 import { getEndTime, useNewRowTransition } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { Localize, localize } from '@deriv-com/translations';
+import { CSSTransition } from 'react-transition-group';
 
-import { useTraderStore } from 'Stores/useTraderStores';
+import { useTraderStore } from '@deriv/trader/src/Stores';
 
-import EmptyPortfolioMessage from '../EmptyPortfolioMessage';
+import EmptyPortfolioMessage from './empty-portfolio-message';
 
 type TUiStore = Pick<
     ReturnType<typeof useStore>['ui'],
@@ -106,7 +104,11 @@ const PositionsDrawerCardItem = ({
     );
 };
 
-const PositionsDrawer = observer(({ ...props }) => {
+/**
+ * PositionsDrawerContent - Content component for positions to be used inside Flyout
+ * This component renders the body and footer of the positions drawer
+ */
+export const PositionsDrawerContent = observer(({ ...props }) => {
     const { symbol, contract_type: trade_contract_type } = useTraderStore();
     const { client, common, contract_trade, portfolio, ui } = useStore();
     const { currency } = client;
@@ -123,8 +125,6 @@ const PositionsDrawer = observer(({ ...props }) => {
     } = portfolio;
     const {
         is_mobile,
-        is_positions_drawer_on,
-        togglePositionsDrawer: toggleDrawer,
         addToast,
         current_focus,
         removeToast,
@@ -132,7 +132,6 @@ const PositionsDrawer = observer(({ ...props }) => {
         should_show_cancellation_warning,
         toggleCancellationWarning,
     } = ui;
-    const drawer_ref = React.useRef(null);
     const list_ref = React.useRef<HTMLDivElement>(null);
     const scrollbar_ref = React.useRef<HTMLElement>(null);
     // Watch for actual translation changes to trigger DataList remount
@@ -189,67 +188,44 @@ const PositionsDrawer = observer(({ ...props }) => {
         />
     );
 
+    return all_positions.length === 0 || error ? <EmptyPortfolioMessage error={error} /> : body_content;
+});
+
+/**
+ * PositionsDrawerFooter - Footer component showing positions summary
+ */
+export const PositionsDrawerFooter = observer(() => {
+    const { client, portfolio } = useStore();
+    const { currency } = client;
+    const { all_positions } = portfolio;
+
+    const getTotalProfit = (active_positions: TPortfolioPosition[]) => {
+        return active_positions.reduce((total: number, position: TPortfolioPosition) => {
+            const profitValue = Number(position.profit_loss) || 0;
+            return total + profitValue;
+        }, 0);
+    };
+
+    if (all_positions.length === 0) return null;
+
     return (
-        <React.Fragment>
-            <div
-                className={classNames('positions-drawer__bg', {
-                    'positions-drawer__bg--open': is_positions_drawer_on,
-                })}
-            />
-            <div
-                id='dt_positions_drawer'
-                className={classNames('positions-drawer', {
-                    'positions-drawer--open': is_positions_drawer_on,
-                })}
-            >
-                <div className='positions-drawer__header'>
-                    <Text color='primary' weight='bold' size='xs'>
-                        <Localize i18n_default_text='Open positions' />
-                    </Text>
-                    <div
-                        data-testid='dt_positions_drawer_close_icon'
-                        id='dt_positions_drawer_close_icon'
-                        className='positions-drawer__icon-close'
-                        onClick={toggleDrawer}
-                    >
-                        <LegacyMinimize2pxIcon
-                            data-testid='dt_positions_drawer_close_icon'
-                            iconSize='xs'
-                            fill='var(--color-text-primary)'
-                        />
-                    </div>
-                </div>
-                <div className='positions-drawer__body' ref={drawer_ref}>
-                    {all_positions.length === 0 || error ? <EmptyPortfolioMessage error={error} /> : body_content}
-                </div>
-                <div className='positions-drawer__footer'>
-                    {all_positions.length > 0 && (
-                        <div className='positions-drawer__summary'>
-                            <Text size='xxs' color='less-prominent' className='positions-drawer__count'>
-                                {all_positions.length}{' '}
-                                {`${all_positions.length > 1 ? localize('open positions') : localize('open position')}`}
-                            </Text>
-                            <div className='positions-drawer__total'>
-                                <Text size='xs' weight='bold'>
-                                    <Localize i18n_default_text='Total P/L:' />
-                                </Text>
-                                <Text
-                                    size='xs'
-                                    weight='bold'
-                                    color={getTotalProfit(all_positions) > 0 ? 'success' : 'danger'}
-                                >
-                                    <React.Fragment>
-                                        <Money amount={getTotalProfit(all_positions)} currency={currency} has_sign />{' '}
-                                        {currency}
-                                    </React.Fragment>
-                                </Text>
-                            </div>
-                        </div>
-                    )}
-                </div>
+        <div className='positions-drawer__summary'>
+            <Text size='xxs' color='less-prominent' className='positions-drawer__count'>
+                {all_positions.length}{' '}
+                {`${all_positions.length > 1 ? localize('open positions') : localize('open position')}`}
+            </Text>
+            <div className='positions-drawer__total'>
+                <Text size='xs' weight='bold'>
+                    <Localize i18n_default_text='Total P/L:' />
+                </Text>
+                <Text size='xs' weight='bold' color={getTotalProfit(all_positions) > 0 ? 'success' : 'danger'}>
+                    <React.Fragment>
+                        <Money amount={getTotalProfit(all_positions)} currency={currency} has_sign /> {currency}
+                    </React.Fragment>
+                </Text>
             </div>
-        </React.Fragment>
+        </div>
     );
 });
 
-export default PositionsDrawer;
+export default PositionsDrawerContent;

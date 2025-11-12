@@ -10,23 +10,20 @@ const store_name = 'ui_store';
 
 export default class UIStore extends BaseStore {
     url_hashed_values = '';
-    is_positions_drawer_on = false;
     is_reports_visible = false;
     reports_route_tab_index = 0;
     is_history_tab_active = false;
+    active_sidebar_flyout = null; // 'theme' | 'language' | 'positions' | null
     // TODO: [cleanup ui-store]
     // Take profit, Stop loss & Deal cancellation checkbox
     should_show_cancellation_warning = true;
 
     // Extensions
-    footer_extensions = [];
-    header_extension = undefined;
     settings_extension = undefined;
     notification_messages_ui = undefined;
 
     is_dark_mode_on = window?.matchMedia?.('(prefers-color-scheme: dark)').matches && isMobile();
     is_settings_modal_on = false;
-    is_language_settings_modal_on = false;
     is_mobile_language_menu_open = false;
 
     // Purchase Controls
@@ -177,7 +174,7 @@ export default class UIStore extends BaseStore {
             'is_chart_countdown_visible',
             'is_chart_layout_default',
             'is_dark_mode_on',
-            'is_positions_drawer_on',
+            'active_sidebar_flyout',
             'is_reports_visible',
             // 'is_purchase_confirm_on',
             // 'is_purchase_lock_on',
@@ -212,9 +209,7 @@ export default class UIStore extends BaseStore {
             duration_m: observable,
             duration_s: observable,
             duration_t: observable,
-            footer_extensions: observable,
             has_real_account_signup_ended: observable,
-            header_extension: observable,
             is_account_needed_modal_on: observable,
             is_forced_to_exit_pnv: observable,
             is_phone_verification_completed: observable,
@@ -230,11 +225,11 @@ export default class UIStore extends BaseStore {
 
             is_history_tab_active: observable,
             is_landscape: observable,
-            is_language_settings_modal_on: observable,
             is_mobile_language_menu_open: observable,
             is_nativepicker_visible: observable,
 
-            is_positions_drawer_on: observable,
+            active_sidebar_flyout: observable,
+            is_positions_drawer_on: computed,
             is_real_acc_signup_on: observable,
             is_real_tab_enabled: observable,
             is_reports_visible: observable,
@@ -293,8 +288,6 @@ export default class UIStore extends BaseStore {
             openPositionsDrawer: action.bound,
             openSwitchToRealAccountModal: action.bound,
             openTopUpModal: action.bound,
-            populateFooterExtensions: action.bound,
-            populateHeaderExtensions: action.bound,
             populateSettingsExtensions: action.bound,
             removePWAPromptEvent: action.bound,
             removeToast: action.bound,
@@ -338,19 +331,19 @@ export default class UIStore extends BaseStore {
             toggleCancellationWarning: action.bound,
             toggleHistoryTab: action.bound,
             toggleOnScreenKeyboard: action.bound,
-            togglePositionsDrawer: action.bound,
             toggleReports: action.bound,
             toggleResetEmailModal: action.bound,
             toggleResetPasswordModal: action.bound,
             toggleServicesErrorModal: action.bound,
             toggleSettingsModal: action.bound,
-            toggleLanguageSettingsModal: action.bound,
             toggleUpdateEmailModal: action.bound,
             toggleUrlUnavailableModal: action.bound,
             field_ref_to_focus: observable,
             setFieldRefToFocus: action.bound,
             toggleTncUpdateModal: action.bound,
             toggleLogoutSuccessModal: action.bound,
+            setSidebarFlyout: action.bound,
+            closeSidebarFlyout: action.bound,
         });
 
         window.addEventListener('resize', this.handleResize);
@@ -405,14 +398,6 @@ export default class UIStore extends BaseStore {
         this.app_contents_scroll_ref = value;
     }
 
-    populateFooterExtensions(footer_extensions) {
-        this.footer_extensions = footer_extensions;
-    }
-
-    populateHeaderExtensions(component) {
-        this.header_extension = component;
-    }
-
     populateSettingsExtensions(menu_items) {
         this.settings_extension = menu_items;
     }
@@ -444,6 +429,10 @@ export default class UIStore extends BaseStore {
 
     get is_tablet() {
         return MAX_MOBILE_WIDTH < this.screen_width && this.screen_width <= MAX_TABLET_WIDTH;
+    }
+
+    get is_positions_drawer_on() {
+        return this.active_sidebar_flyout === 'positions';
     }
 
     setRouteModal() {
@@ -539,13 +528,9 @@ export default class UIStore extends BaseStore {
         this.is_settings_modal_on = !this.is_settings_modal_on;
     }
 
-    toggleLanguageSettingsModal() {
-        this.is_language_settings_modal_on = !this.is_language_settings_modal_on;
-    }
-
     openPositionsDrawer() {
         // show and hide Positions Drawer
-        this.is_positions_drawer_on = true;
+        this.active_sidebar_flyout = 'positions';
     }
 
     setShouldShowCancel(value) {
@@ -588,11 +573,6 @@ export default class UIStore extends BaseStore {
             target_label: '',
             target_dmt5_label: '',
         };
-    }
-
-    togglePositionsDrawer() {
-        // toggle Positions Drawer
-        this.is_positions_drawer_on = !this.is_positions_drawer_on;
     }
 
     toggleReports(is_visible) {
@@ -799,5 +779,14 @@ export default class UIStore extends BaseStore {
 
     toggleLogoutSuccessModal(value) {
         this.is_logout_success_modal_visible = value;
+    }
+
+    setSidebarFlyout(flyout_type) {
+        // flyout_type can be 'theme' | 'language' | 'positions' | null
+        this.active_sidebar_flyout = flyout_type;
+    }
+
+    closeSidebarFlyout() {
+        this.active_sidebar_flyout = null;
     }
 }

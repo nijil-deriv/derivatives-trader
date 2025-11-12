@@ -1,3 +1,1 @@
-import PositionsDrawer from './positions-drawer';
-
-export default PositionsDrawer;
+export { PositionsDrawerContent, PositionsDrawerFooter } from './positions-drawer-content';

@@ -357,8 +357,8 @@ function generateComponentTokens() {
 
     // Navigation Colors
     --color-nav-bg: var(--color-surface-primary);
-    --color-nav-border: var(--color-interactive-default);
-    --color-nav-item-active: var(--brand-primary);
+    --color-nav-border: var(--color-surface-border);
+    --color-nav-item-active: var(--brand-danger);
     --color-nav-item-hover: var(--color-interactive-hover);
 
     // Modal/Dialog Colors
@@ -450,9 +450,9 @@ function generateComponentTokens() {
     --color-card-shadow: var(--color-shadow-subtle);
 
     // Navigation Colors
-    --color-nav-bg: #{lighten($color-black, 8%)};
-    --color-nav-border: var(--color-interactive-default);
-    --color-nav-item-active: var(--brand-primary);
+    --color-nav-bg: var(--color-surface-primary);
+    --color-nav-border: var(--color-surface-border);
+    --color-nav-item-active: var(--brand-danger);
     --color-nav-item-hover: var(--color-interactive-hover);
 
     // Modal/Dialog Colors

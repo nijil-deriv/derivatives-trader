@@ -1633,7 +1633,7 @@ export default class TradeStore extends BaseStore {
             },
             settings: {
                 theme: this.root_store.ui.is_dark_mode_on ? 'dark' : 'light',
-                positions_drawer: this.root_store.ui.is_positions_drawer_on ? 'open' : 'closed',
+                positions_drawer: this.root_store.ui.active_sidebar_flyout ? 'open' : 'closed',
                 chart: {
                     toolbar_position: this.root_store.ui.is_chart_layout_default ? 'bottom' : 'left',
                     chart_asset_info: this.root_store.ui.is_chart_asset_info_visible ? 'visible' : 'hidden',

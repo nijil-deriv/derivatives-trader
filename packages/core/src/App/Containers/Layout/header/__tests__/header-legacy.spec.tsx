@@ -51,7 +51,6 @@ describe('HeaderLegacy', () => {
             is_logging_in: false,
         },
         ui: {
-            header_extension: null,
             is_app_disabled: false,
             is_route_modal_on: false,
         },
@@ -125,36 +124,6 @@ describe('HeaderLegacy', () => {
             renderComponent();
 
             expect(screen.getByTestId('dt_toggle_menu_drawer')).toBeInTheDocument();
-        });
-
-        it('should render header extension when logged in and extension exists', () => {
-            const header_extension = <div data-testid='dt_header_extension'>Header Extension</div>;
-
-            renderComponent({
-                ui: {
-                    ...default_mock_store.ui,
-                    header_extension,
-                },
-            });
-
-            expect(screen.getByTestId('dt_header_extension')).toBeInTheDocument();
-        });
-
-        it('should not render header extension when not logged in', () => {
-            const header_extension = <div data-testid='dt_header_extension'>Header Extension</div>;
-
-            renderComponent({
-                client: {
-                    ...default_mock_store.client,
-                    is_logged_in: false,
-                },
-                ui: {
-                    ...default_mock_store.ui,
-                    header_extension,
-                },
-            });
-
-            expect(screen.queryByTestId('dt_header_extension')).not.toBeInTheDocument();
         });
     });
 

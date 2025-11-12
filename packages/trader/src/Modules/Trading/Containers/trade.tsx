@@ -9,7 +9,6 @@ import { Loader, useDevice } from '@deriv-com/ui';
 
 import ChartLoader from 'App/Components/Elements/chart-loader';
 import MarketIsClosedOverlay from 'App/Components/Elements/market-is-closed-overlay';
-import PositionsDrawer from 'App/Components/Elements/PositionsDrawer';
 import { useTraderStore } from 'Stores/useTraderStores';
 
 import FormLayout from '../Components/Form/form-layout';
@@ -196,7 +195,6 @@ const Trade = observer(() => {
             })}
             id='trade_container'
         >
-            {isDesktop && <PositionsDrawer />}
             {/* Div100vhContainer is workaround for browsers on devices
                     with toolbars covering screen height,
                     using css vh is not returning correct screen height */}

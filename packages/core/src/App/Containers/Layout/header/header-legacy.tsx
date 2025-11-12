@@ -15,7 +15,7 @@ import HeaderAccountActions from './header-account-actions';
 const HeaderLegacy = observer(() => {
     const { client, ui, notifications } = useStore();
     const { currency, is_logged_in, is_logging_in } = client;
-    const { header_extension, is_app_disabled, is_route_modal_on } = ui;
+    const { is_app_disabled, is_route_modal_on } = ui;
     const { addNotificationMessage, client_notifications, removeNotificationMessage } = notifications;
 
     const { isDesktop } = useDevice();
@@ -48,9 +48,6 @@ const HeaderLegacy = observer(() => {
                         <React.Fragment>
                             <ToggleMenuDrawer />
                             <BrandShortLogo />
-                            {header_extension && is_logged_in && (
-                                <div className='header__menu-left-extensions'>{header_extension}</div>
-                            )}
                         </React.Fragment>
                     )}
                     <MenuLinks />

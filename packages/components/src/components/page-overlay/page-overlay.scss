@@ -81,7 +81,7 @@
         }
     }
     &__content {
-        padding: 2.4rem 0 0;
+        padding: 2.4rem 2.4rem 0;
         display: flex;
         background-color: var(--color-surface-primary);
 
@@ -89,15 +89,13 @@
             min-width: 256px;
             margin-left: 2.4rem;
         }
-        @include mobile-or-tablet-screen {
+        @include mobile-screen {
             flex: 1;
             padding: 0;
         }
     }
     &__header-wrapper,
     &__content {
-        max-width: 1232px;
-        margin: auto;
         position: relative;
 
         @include mobile-or-tablet-screen {

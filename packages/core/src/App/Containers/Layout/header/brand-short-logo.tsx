@@ -21,7 +21,7 @@ const BrandShortLogo = observer(() => {
     return (
         <div className='header__menu-left-logo'>
             <div onClick={handleLogoClick} style={{ cursor: 'pointer' }} data-testid='brand-logo-clickable'>
-                <BrandDerivLogoCoralIcon width={24} height={24} />
+                <BrandDerivLogoCoralIcon width={32} height={32} />
             </div>
         </div>
     );
