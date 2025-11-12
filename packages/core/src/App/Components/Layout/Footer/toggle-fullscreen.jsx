@@ -6,26 +6,31 @@ import { Popover } from '@deriv/components';
 import { LegacyFullscreen1pxIcon, LegacyRestore1pxIcon } from '@deriv/quill-icons';
 import { useTranslations } from '@deriv-com/translations';
 
+const fullscreen_map = {
+    event: ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'],
+    element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
+    fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],
+    fnc_exit: ['exitFullscreen', 'webkitExitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen'],
+};
+
 const ToggleFullScreen = ({ showPopover }) => {
     const { localize } = useTranslations();
     const [is_full_screen, setIsFullScreen] = React.useState(false);
 
-    const fullscreen_map = {
-        event: ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'],
-        element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
-        fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],
-        fnc_exit: ['exitFullscreen', 'webkitExitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen'],
-    };
-
     const onFullScreen = React.useCallback(() => {
         setIsFullScreen(fullscreen_map.element.some(el => document[el]));
-    }, [fullscreen_map.element]);
+    }, []);
 
     React.useEffect(() => {
         fullscreen_map.event.forEach(event => {
             document.addEventListener(event, onFullScreen, false);
         });
-    }, [fullscreen_map.event, onFullScreen]);
+        return () => {
+            fullscreen_map.event.forEach(event => {
+                document.removeEventListener(event, onFullScreen, false);
+            });
+        };
+    }, [onFullScreen]);
 
     const toggleFullScreen = e => {
         e.stopPropagation();

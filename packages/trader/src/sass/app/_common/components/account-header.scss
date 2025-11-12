@@ -1,0 +1,72 @@
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.6rem;
+    background-color: var(--general-section-1);
+    margin-bottom: 0.8rem;
+
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        min-width: 0;
+    }
+
+    &__type {
+        color: var(--text-less-prominent);
+        font-size: 1.2rem;
+        line-height: 1.4rem;
+        margin: 0;
+    }
+
+    &__balance {
+        color: var(--color-text-success);
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 2rem;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    &__logout,
+    &__login {
+        all: unset;
+        cursor: pointer;
+        padding: 0;
+        color: var(--text-prominent);
+        font-size: 1.6rem;
+        font-weight: 700;
+        transition: opacity 0.2s ease;
+        flex-shrink: 0;
+        white-space: nowrap;
+
+        &:hover {
+            opacity: 0.8;
+        }
+
+        &:active {
+            opacity: 0.6;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--brand-red-coral);
+            outline-offset: 2px;
+        }
+    }
+}
