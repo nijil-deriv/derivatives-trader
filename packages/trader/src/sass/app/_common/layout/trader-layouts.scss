@@ -52,7 +52,6 @@ $FLOATING_HEADER_HEIGHT: 41px;
     display: flex;
     height: 100vh;
     overflow: hidden;
-    padding: 1.6rem 1.6rem 1.6rem 0;
 
     &__replay {
         direction: ltr;
@@ -416,6 +415,7 @@ $FLOATING_HEADER_HEIGHT: 41px;
 .chart-container {
     width: 100%;
     position: relative;
+    padding: 1.6rem 1.6rem 1.6rem 0;
 
     &__wrapper {
         position: relative;
@@ -634,14 +634,15 @@ $FLOATING_HEADER_HEIGHT: 41px;
 }
 
 /** @define sidebar; weak; */
-.sidebar {
-    &__container {
-        position: relative;
-        margin: 0 0 0 1.6rem;
-        width: $SIDEBAR_WIDTH;
-        z-index: 5;
-    }
+.trade-params {
+    position: relative;
+    padding: 1.6rem 1.6rem 1.6rem 0;
+    width: calc(#{$SIDEBAR_WIDTH} + 1.6rem);
+    z-index: 5;
+
     &__items {
+        display: flex;
+        flex-direction: column;
         opacity: 1;
         transform: none;
         position: relative;
@@ -662,6 +663,11 @@ $FLOATING_HEADER_HEIGHT: 41px;
             content: '';
             background-color: var(--color-modal-backdrop);
         }
+
+        &-content {
+            flex: 1;
+        }
+
         &--market-closed {
             & .dc-tooltip--with-label {
                 display: none;
@@ -669,6 +675,70 @@ $FLOATING_HEADER_HEIGHT: 41px;
             & .dc-tooltip--with-label:before,
             .dc-tooltip--with-label:after {
                 display: none;
+            }
+        }
+    }
+
+    &-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        background-color: var(--color-surface-primary);
+        min-height: 2.4rem;
+
+        &__date,
+        &__time {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--color-text-primary);
+            white-space: nowrap;
+        }
+
+        .network-status__wrapper {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .network-status__circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+
+            &--online {
+                background-color: var(--color-status-success);
+            }
+
+            &--offline {
+                background-color: var(--color-status-danger);
+            }
+
+            &--blinker {
+                background-color: var(--color-status-warning);
+                animation: blink 1s infinite;
+            }
+        }
+
+        .footer__link {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            flex-shrink: 0;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+
+        .footer__icon {
+            display: flex;
+            align-items: center;
+
+            svg {
+                width: 16px;
+                height: 16px;
             }
         }
     }

@@ -147,15 +147,6 @@ export const PositionsDrawerContent = observer(({ ...props }) => {
         if (scrollbar_ref.current) scrollbar_ref.current.scrollTop = 0;
     }, [symbol, trade_contract_type]);
 
-    const getTotalProfit = (active_positions: TPortfolioPosition[]) => {
-        return active_positions.reduce((total: number, position: TPortfolioPosition) => {
-            // Use profit_loss property to match individual position display
-            const profitValue = Number(position.profit_loss) || 0;
-
-            return total + profitValue;
-        }, 0);
-    };
-
     const body_content = (
         // Force DataList to remount when translations actually change
         // Using translated text as key ensures remount happens after translations load
@@ -209,12 +200,12 @@ export const PositionsDrawerFooter = observer(() => {
     if (all_positions.length === 0) return null;
 
     return (
-        <div className='positions-drawer__summary'>
-            <Text size='xxs' color='less-prominent' className='positions-drawer__count'>
+        <div className='positions-drawer-footer--summary'>
+            <Text size='xxs' color='less-prominent' className='positions-drawer-footer--count'>
                 {all_positions.length}{' '}
                 {`${all_positions.length > 1 ? localize('open positions') : localize('open position')}`}
             </Text>
-            <div className='positions-drawer__total'>
+            <div className='positions-drawer-footer--total'>
                 <Text size='xs' weight='bold'>
                     <Localize i18n_default_text='Total P/L:' />
                 </Text>

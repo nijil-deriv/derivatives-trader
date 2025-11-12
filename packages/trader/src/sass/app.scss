@@ -1,5 +1,6 @@
 // Layout
 @import 'app/_common/layout/trader-layouts';
+@import 'app/_common/layout/sidebar';
 
 // Drawers
 @import 'app/_common/drawer/contract-drawer';
@@ -9,6 +10,7 @@
 
 // Components
 @import 'app/_common/components/account-header';
+@import 'app/_common/components/flyout-selector';
 @import 'app/_common/components/strike';
 @import 'app/_common/components/allow-equals';
 @import 'app/_common/components/contract-audit';
@@ -20,6 +22,7 @@
 @import 'app/_common/components/contract-type-no-result';
 @import 'app/_common/components/market-is-closed-overlay';
 @import 'app/_common/components/number-selector';
+@import 'app/_common/components/positions-drawer';
 @import 'app/_common/components/purchase-button';
 @import 'app/_common/components/range-slider';
 

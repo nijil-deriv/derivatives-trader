@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+
 import { StandaloneMoonRegularIcon, StandaloneSunBrightRegularIcon } from '@deriv/quill-icons';
 import { observer, useStore } from '@deriv/stores';
 import { localize } from '@deriv-com/translations';

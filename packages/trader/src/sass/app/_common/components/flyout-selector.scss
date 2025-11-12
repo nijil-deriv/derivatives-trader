@@ -23,12 +23,12 @@
         text-align: left;
 
         &:hover:not(:disabled) {
-            background-color: var(--color-interactive-hover);
+            background-color: var(--color-surface-section);
         }
 
         &--active {
-            border-color: var(--color-brand-primary);
-            background-color: var(--color-interactive-active);
+            border-color: var(--color-text-primary);
+            background-color: var(--color-surface-section);
         }
 
         &:disabled {

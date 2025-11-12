@@ -17,16 +17,16 @@ type TScreenLarge = {
 };
 const ScreenLarge = ({ is_market_closed = false, is_trade_enabled, is_single_logging_in = false }: TScreenLarge) => (
     <div
-        className={classNames('sidebar__items', {
-            'sidebar__items--market-closed': is_market_closed,
+        className={classNames('trade-params__items', {
+            'trade-params__items--market-closed': is_market_closed,
         })}
     >
         {!is_trade_enabled || is_single_logging_in ? (
             <TradeParamsLoader speed={2} />
         ) : (
             <React.Fragment>
-                <div className='sidebar__items-content'>
-                    <AccountHeader />
+                <AccountHeader />
+                <div className='trade-params__items-content'>
                     <Fieldset className='trade-container__fieldset trade-types'>
                         <ContractType />
                     </Fieldset>

@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
+
+import { UNSUPPORTED_LANGUAGES } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { getAllowedLanguages, useTranslations } from '@deriv-com/translations';
-import { UNSUPPORTED_LANGUAGES } from '@deriv/shared';
 
 const LanguageSelector = observer(() => {
     const { common } = useStore();

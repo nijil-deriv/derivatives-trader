@@ -10,7 +10,6 @@ import ErrorBoundary from './Components/Elements/Errors/error-boundary.jsx';
 import LandscapeBlocker from './Components/Elements/LandscapeBlocker';
 import AppToastMessages from './Containers/app-toast-messages.jsx';
 import AppContents from './Containers/Layout/app-contents.jsx';
-import Sidebar from './Components/Layout/Sidebar';
 import Header from './Containers/Layout/header';
 import AppModals from './Containers/Modals';
 import Routes from './Containers/Routes/routes.jsx';
@@ -50,7 +49,7 @@ const AppContent: React.FC<{ passthrough: any }> = observer(({ passthrough }) =>
     return (
         <ThemeProvider theme={is_dark_mode_on ? 'dark' : 'light'}>
             <LandscapeBlocker />
-            {isMobile ? <Header /> : <Sidebar />}
+            {isMobile && <Header />}
             <ErrorBoundary root_store={store}>
                 <AppContents>
                     <Routes {...({ passthrough } as any)} />

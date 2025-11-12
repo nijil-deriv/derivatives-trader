@@ -38,7 +38,7 @@
             }
         }
     }
-    .sidebar__items--blur {
+    .trade-params__items--blur {
         .popover {
             display: none;
         }
@@ -1097,80 +1097,6 @@
             .change-currency .dc-form-submit-button {
                 bottom: calc(100vh - 100vw);
             }
-        }
-    }
-}
-
-.sidebar__items {
-    display: flex;
-    flex-direction: column;
-
-    &-content {
-        flex: 1;
-    }
-}
-
-.trade-params-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem;
-    margin-top: auto;
-    background-color: var(--color-surface-primary);
-    min-height: 4rem;
-
-    &__date,
-    &__time {
-        font-size: 1.4rem;
-        font-weight: 400;
-        color: var(--color-text-primary);
-        white-space: nowrap;
-    }
-
-    .network-status__wrapper {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-    }
-
-    .network-status__circle {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-
-        &--online {
-            background-color: var(--color-status-success);
-        }
-
-        &--offline {
-            background-color: var(--color-status-danger);
-        }
-
-        &--blinker {
-            background-color: var(--color-status-warning);
-            animation: blink 1s infinite;
-        }
-    }
-
-    .footer__link {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        text-decoration: none;
-        flex-shrink: 0;
-
-        &:hover {
-            opacity: 0.8;
-        }
-    }
-
-    .footer__icon {
-        display: flex;
-        align-items: center;
-
-        svg {
-            width: 16px;
-            height: 16px;
         }
     }
 }

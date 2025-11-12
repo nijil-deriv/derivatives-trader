@@ -9,6 +9,7 @@ import { Loader, useDevice } from '@deriv-com/ui';
 
 import ChartLoader from 'App/Components/Elements/chart-loader';
 import MarketIsClosedOverlay from 'App/Components/Elements/market-is-closed-overlay';
+import Sidebar from 'App/Components/Layout/Sidebar';
 import { useTraderStore } from 'Stores/useTraderStores';
 
 import FormLayout from '../Components/Form/form-layout';
@@ -70,7 +71,7 @@ const Trade = observer(() => {
     const { is_dark_mode_on: is_dark_theme, notification_messages_ui: NotificationMessages } = ui;
     const { is_eu, is_logged_in, is_logging_in } = client;
     const { network_status } = common;
-    const { isDesktop, isMobile, isTabletPortrait } = useDevice();
+    const { isMobile, isTabletPortrait } = useDevice();
 
     const [digits, setDigits] = React.useState<number[]>([]);
     const [tick, setTick] = React.useState<null | TickSpotData>(null);
@@ -181,7 +182,7 @@ const Trade = observer(() => {
         [open_market, try_synthetic_indices, try_open_markets]
     );
 
-    const form_wrapper_class = isMobile ? 'mobile-wrapper' : 'sidebar__container';
+    const form_wrapper_class = isMobile ? 'mobile-wrapper' : 'trade-params';
     const chart_height_offset = React.useMemo(() => {
         if (is_accumulator) return '295px';
         if (is_turbos) return '300px';
@@ -195,6 +196,7 @@ const Trade = observer(() => {
             })}
             id='trade_container'
         >
+            {!isMobile && <Sidebar />}
             {/* Div100vhContainer is workaround for browsers on devices
                     with toolbars covering screen height,
                     using css vh is not returning correct screen height */}

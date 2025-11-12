@@ -14,10 +14,11 @@ import { routes } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { localize } from '@deriv-com/translations';
 
-import BrandShortLogo from '../../../Containers/Layout/header/brand-short-logo';
+import { PositionsDrawerContent, PositionsDrawerFooter } from '../../Elements/PositionsDrawer';
+import BrandShortLogo from '../brand-short-logo';
+
 import LanguageSelector from './language-selector';
 import ThemeSelector from './theme-selector';
-// import { PositionsDrawerContent, PositionsDrawerFooter } from '../../../../../../trader/src/App/Components/Elements/PositionsDrawer';
 
 type TSidebarItem = {
     id: string;
@@ -127,8 +128,8 @@ const Sidebar = observer(() => {
             case 'positions':
                 return {
                     title: localize('Open positions'),
-                    content: null,
-                    footer: null,
+                    content: <PositionsDrawerContent />,
+                    footer: <PositionsDrawerFooter />,
                 };
             default:
                 return null;
@@ -194,16 +195,14 @@ const Sidebar = observer(() => {
             </aside>
 
             {/* Single Flyout with conditional content */}
-            {flyoutContent && (
-                <Flyout
-                    is_open={active_sidebar_flyout !== null}
-                    onClose={closeFlyout}
-                    title={flyoutContent.title}
-                    footer_content={flyoutContent.footer}
-                >
-                    {flyoutContent.content}
-                </Flyout>
-            )}
+            <Flyout
+                is_open={active_sidebar_flyout !== null}
+                onClose={closeFlyout}
+                title={flyoutContent?.title || ''}
+                footer_content={flyoutContent?.footer}
+            >
+                {flyoutContent?.content}
+            </Flyout>
         </React.Fragment>
     );
 });
