@@ -88,9 +88,23 @@ export const AVAILABLE_CONTRACTS = [
     },
 ];
 
-export const getTradeTypesList = (contract_types_list: ReturnType<typeof useTraderStore>['contract_types_list']) => {
+/**
+ * Gets the list of available trade types from backend contract_types_list
+ * Optionally applies mobile filtering if mobile_filtered_list is provided (AppV2 only)
+ *
+ * @param contract_types_list - Contract types list from backend (contracts_for API)
+ * @param mobile_filtered_list - Optional pre-filtered list for mobile native app
+ * @returns Array of trade types to display
+ */
+export const getTradeTypesList = (
+    contract_types_list: ReturnType<typeof useTraderStore>['contract_types_list'],
+    mobile_filtered_list?: ReturnType<typeof useTraderStore>['contract_types_list']
+) => {
+    // Use mobile-filtered list if provided, otherwise use original
+    const types_to_process = mobile_filtered_list || contract_types_list;
+
     const available_trade_types = getAvailableContractTypes(
-        contract_types_list as unknown as Parameters<typeof getAvailableContractTypes>[0],
+        types_to_process as unknown as Parameters<typeof getAvailableContractTypes>[0],
         unsupported_contract_types_list
     );
     return Object.values(getCategoriesSortedByKey(available_trade_types))
