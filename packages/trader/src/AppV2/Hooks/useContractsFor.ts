@@ -10,6 +10,8 @@ import { TContractType } from 'Modules/Trading/Components/Form/ContractType/type
 import { useTraderStore } from 'Stores/useTraderStores';
 import { TConfig, TContractTypesList } from 'Types';
 
+import { useMobileTradeTypesFilter } from './useMobileTradeTypesFilter';
+
 const useContractsFor = () => {
     const [contract_types_list, setContractTypesList] = React.useState<TContractTypesList | []>([]);
 
@@ -18,6 +20,10 @@ const useContractsFor = () => {
         useTraderStore();
     const { client } = useStore();
     const { loginid } = client;
+
+    // [AI] Get mobile trade types filter for native app WebView
+    const { filterContractTypesList } = useMobileTradeTypesFilter();
+    // [/AI]
 
     // Helper function to get underlying_symbol from active_symbols
     const getUnderlyingSymbol = useCallback(
@@ -80,11 +86,19 @@ const useContractsFor = () => {
         [contract_type]
     );
 
-    const getTradeTypes = useCallback((categories: TContractTypesList) => {
-        return Array.isArray(categories) && categories.length === 0
-            ? []
-            : getTradeTypesList(categories as TContractTypesList);
-    }, []);
+    const getTradeTypes = useCallback(
+        (categories: TContractTypesList) => {
+            if (Array.isArray(categories) && categories.length === 0) {
+                return [];
+            }
+
+            // Apply mobile filtering before getting trade types
+            const filtered_categories = filterContractTypesList(categories as TContractTypesList);
+
+            return getTradeTypesList(filtered_categories);
+        },
+        [filterContractTypesList]
+    );
 
     const getNewContractType = useCallback(
         (trade_types: TContractType[]) => {

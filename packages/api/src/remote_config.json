@@ -2,5 +2,19 @@
     "cs_chat_intercom": false,
     "cs_chat_whatsapp": false,
     "tracking_rudderstack": true,
-    "tracking_datadog": true
+    "tracking_datadog": true,
+    "mobile_app_allowed_categories": [
+        "Accumulators",
+        "Multipliers",
+        "Vanillas",
+        "Turbos"
+    ],
+    "mobile_app_allowed_trade_types": [
+        "accumulator",
+        "multiplier",
+        "vanillalong",
+        "vanillashort",
+        "turboslong",
+        "turbosshort"
+    ]
 }
