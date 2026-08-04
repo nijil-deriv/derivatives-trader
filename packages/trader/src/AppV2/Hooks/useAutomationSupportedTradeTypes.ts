@@ -20,10 +20,10 @@ const TRADE_TYPE_API_TYPES: ReadonlyArray<readonly [string, readonly string[]]> 
  * `AutomationPanel` would trigger it but the panel itself was gated on a
  * non-empty supported set.
  */
-const useAutomationSupportedTradeTypes = (): Set<string> => {
-    const { strategies: server_strategies } = useAutoStrategies();
+const useAutomationSupportedTradeTypes = (): { supported_trade_types: Set<string>; is_loading: boolean } => {
+    const { strategies: server_strategies, isLoading } = useAutoStrategies();
 
-    return useMemo(() => {
+    const supported_trade_types = useMemo(() => {
         if (server_strategies.length === 0) return new Set<string>();
 
         const supported_api_types = new Set(server_strategies.flatMap(strategy => strategy.supported_contract_types));
@@ -34,6 +34,8 @@ const useAutomationSupportedTradeTypes = (): Set<string> => {
             )
         );
     }, [server_strategies]);
+
+    return { supported_trade_types, is_loading: isLoading };
 };
 
 export default useAutomationSupportedTradeTypes;

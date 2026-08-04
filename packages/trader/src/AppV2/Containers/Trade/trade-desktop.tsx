@@ -15,7 +15,7 @@ import AutomationPanel from 'AppV2/Components/AutomationPanel/automation-panel';
 import AutomationGuide from 'AppV2/Components/AutomationPanel/AutomationGuide';
 import ClosedMarketMessage from 'AppV2/Components/ClosedMarketMessage';
 import Guide from 'AppV2/Components/Guide';
-import MarketTabs from 'AppV2/Components/MarketTabs';
+import MarketTabs, { MarketTabsSkeleton } from 'AppV2/Components/MarketTabs';
 import OnboardingGuide from 'AppV2/Components/OnboardingGuide/GuideForPages';
 import PurchaseButton from 'AppV2/Components/PurchaseButton';
 import TradeErrorSnackbar from 'AppV2/Components/TradeErrorSnackbar';
@@ -60,7 +60,8 @@ const TradeDesktop = observer(() => {
     } = useTraderStore();
 
     const { trade_types } = useContractsFor();
-    const supported_automation_trade_types = useAutomationSupportedTradeTypes();
+    const { supported_trade_types: supported_automation_trade_types, is_loading: are_strategies_loading } =
+        useAutomationSupportedTradeTypes();
     const { is_enabled: is_automation_enabled, is_ready: is_automation_ready } = useIsAutomationEnabled();
 
     // When automation is off (EU), clear a stale persisted automation tab so the
@@ -128,11 +129,19 @@ const TradeDesktop = observer(() => {
                     })}
                 >
                     <div className='trade__header'>
-                        {/* In automation mode, restrict the selector's trade types to supported ones. */}
-                        <MarketTabs
-                            supported_trade_types={is_automation_active ? supported_automation_trade_types : undefined}
-                            onSelectorOpenChange={handleMarketSelectorOpenChange}
-                        />
+                        {/* In automation mode, restrict the selector's trade types to supported ones — and
+                            skeleton the strip until that supported set has loaded, so an unfilterable stale
+                            tab is never shown as a normal tab. Manual trading renders the strip immediately. */}
+                        {is_automation_active && are_strategies_loading ? (
+                            <MarketTabsSkeleton />
+                        ) : (
+                            <MarketTabs
+                                supported_trade_types={
+                                    is_automation_active ? supported_automation_trade_types : undefined
+                                }
+                                onSelectorOpenChange={handleMarketSelectorOpenChange}
+                            />
+                        )}
                         <AccountHeader />
                     </div>
                     <div className='trade__grid'>

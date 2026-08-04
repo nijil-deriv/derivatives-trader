@@ -276,6 +276,11 @@ export default class TradeStore extends BaseStore {
     // active one via `open_markets`; mutate it via add/remove/replaceOpenMarket.
     open_markets_manual: TOpenMarket[] = readOpenMarkets('manual');
     open_markets_automation: TOpenMarket[] = readOpenMarkets('automation');
+    // Trade types automation supports (resolved from server strategies, set by the automation tab
+    // strip once loaded). While non-empty AND in automation mode, `setActiveOpenMarkets` filters the
+    // automation collection to these — a true add-time guard so an unsupported pair can never enter or persist in the strip. Plain field: read at write time, no reactivity
+    // needed. Empty = not loaded yet (no filtering).
+    automation_supported_trade_types: Set<string> = new Set();
     // Per-mode memory of the last active (symbol, contract_type). The store keeps a single active
     // symbol/contract_type. On switch we snapshot the mode we leave and
     // restore the mode we enter to its own market. Session-only (not persisted).
@@ -641,6 +646,7 @@ export default class TradeStore extends BaseStore {
             addOpenMarket: action.bound,
             removeOpenMarket: action.bound,
             replaceOpenMarket: action.bound,
+            setAutomationSupportedTradeTypes: action.bound,
             setReplacingMarket: action.bound,
             setIsSelectingMarket: action.bound,
             onChartBarrierChange: action.bound,
@@ -1225,8 +1231,14 @@ export default class TradeStore extends BaseStore {
     // mutation only ever touches the mode the strip is currently showing.
     setActiveOpenMarkets(next: TOpenMarket[]) {
         if (this.is_automation_mode) {
-            this.open_markets_automation = next;
-            writeOpenMarkets('automation', next);
+            // Guard: once the automation-supported set is known, an unsupported trade type can never
+            // be written to (or persisted in) the automation strip — enforced here, the single writer
+            // for every add/replace/restore path, so it's a true add-time guard, not after-the-fact
+            // cleanup. Empty set = not loaded yet → pass through unfiltered.
+            const supported = this.automation_supported_trade_types;
+            const guarded = supported.size ? next.filter(market => supported.has(market.contract_type)) : next;
+            this.open_markets_automation = guarded;
+            writeOpenMarkets('automation', guarded);
         } else {
             this.open_markets_manual = next;
             writeOpenMarkets('manual', next);
@@ -1248,6 +1260,17 @@ export default class TradeStore extends BaseStore {
     replaceOpenMarket(old_market: TOpenMarket, next_market: TOpenMarket) {
         if (isSameMarket(old_market, next_market)) return this.addOpenMarket(next_market);
         this.setActiveOpenMarkets(replaceInOpenMarkets(this.open_markets, old_market, next_market));
+    }
+
+    // Record the trade types automation supports (from server strategies). Setting it re-applies the
+    // guard once to the current automation collection, dropping any unsupported tab already carried
+    // over or restored from a legacy persisted state; all later adds are then blocked at the writer
+    // (`setActiveOpenMarkets`). The automation tab-seeding effect keeps a supported market active if
+    // this removed the active one. Reference-compared so it's a no-op when the set is unchanged.
+    setAutomationSupportedTradeTypes(supported_trade_types: Set<string>) {
+        if (this.automation_supported_trade_types === supported_trade_types) return;
+        this.automation_supported_trade_types = supported_trade_types;
+        if (this.is_automation_mode && supported_trade_types.size) this.setActiveOpenMarkets(this.open_markets);
     }
 
     // Trade-type group of the current contract type (paired with duration_default_applied_for).

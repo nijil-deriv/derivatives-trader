@@ -8,6 +8,7 @@ const mockSelect = jest.fn();
 const mockAdd = jest.fn();
 const mockRemove = jest.fn();
 const mockReplace = jest.fn();
+const mockSetSupported = jest.fn();
 const mockSetReplacing = jest.fn();
 let mockIsMarketSelectorOpen = false;
 const mockSetMarketSelectorOpen = jest.fn((open: boolean) => {
@@ -68,6 +69,7 @@ jest.mock('Stores/useTraderStores', () => ({
         addOpenMarket: mockAdd,
         removeOpenMarket: mockRemove,
         replaceOpenMarket: mockReplace,
+        setAutomationSupportedTradeTypes: mockSetSupported,
         selectMarketAndTradeType: mockSelect,
         setReplacingMarket: mockSetReplacing,
         is_market_selector_open: mockIsMarketSelectorOpen,
@@ -208,6 +210,25 @@ describe('MarketTabs', () => {
         mockOpenMarkets = [turbos_market, { symbol: 'frxAUDUSD', contract_type: 'turboslong' }, rise_market];
         render(<MarketTabs supported_trade_types={new Set(['rise_fall'])} />);
         expect(mockSelect).toHaveBeenCalledWith(rise_market.symbol, rise_market.contract_type);
+    });
+
+    it('hands the supported set to the store so unsupported tabs are guarded in Automate', () => {
+        // A Turbos tab carried over/persisted into Automate would otherwise linger permanently
+        // disabled (never active → its remove ✕ never shows). Passing the supported set to the store
+        // lets its tab-strip writer drop/block unsupported pairs.
+        mockStoreSymbol = rise_market.symbol;
+        mockStoreContractType = rise_market.contract_type;
+        mockOpenMarkets = [rise_market, turbos_market];
+        render(<MarketTabs supported_trade_types={new Set(['rise_fall'])} />);
+        expect(mockSetSupported).toHaveBeenCalledWith(new Set(['rise_fall']));
+    });
+
+    it('does not set a supported set in unfiltered (manual) mode', () => {
+        mockStoreSymbol = rise_market.symbol;
+        mockStoreContractType = rise_market.contract_type;
+        mockOpenMarkets = [rise_market, turbos_market];
+        render(<MarketTabs />);
+        expect(mockSetSupported).not.toHaveBeenCalled();
     });
 
     it('adds a default supported market when no tradeable tab exists', async () => {

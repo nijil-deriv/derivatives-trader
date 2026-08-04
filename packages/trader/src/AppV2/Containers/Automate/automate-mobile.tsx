@@ -17,7 +17,7 @@ import StakeMultiplier from 'AppV2/Components/AutomationPanel/StakeMultiplier/st
 import StrategySelector from 'AppV2/Components/AutomationPanel/StrategySelector';
 import ThresholdInput from 'AppV2/Components/AutomationPanel/ThresholdInput/threshold-input';
 import CurrentSpot from 'AppV2/Components/CurrentSpot';
-import MarketTabs from 'AppV2/Components/MarketTabs';
+import MarketTabs, { MarketTabsSkeleton } from 'AppV2/Components/MarketTabs';
 import ServiceErrorSheet from 'AppV2/Components/ServiceErrorSheet';
 import TradeErrorSnackbar from 'AppV2/Components/TradeErrorSnackbar';
 import { TradeParameters } from 'AppV2/Components/TradeParameters';
@@ -57,7 +57,8 @@ const AutomateMobile = observer(() => {
     const automation_store = useAutomationStore();
     const { config, run_status, is_running, is_paused } = automation_store;
     const { trade_types } = useContractsFor();
-    const supported_automation_trade_types = useAutomationSupportedTradeTypes();
+    const { supported_trade_types: supported_automation_trade_types, is_loading: are_strategies_loading } =
+        useAutomationSupportedTradeTypes();
     const { localize } = useTranslations();
     useDefaultSymbol();
     useNonAutomatableSymbolSnackbar();
@@ -133,7 +134,11 @@ const AutomateMobile = observer(() => {
             <div className='automate-mobile__main'>
                 <AutomationGuide />
                 <div className='automate-mobile__content'>
-                    <MarketTabs supported_trade_types={supported_automation_trade_types} />
+                    {are_strategies_loading ? (
+                        <MarketTabsSkeleton />
+                    ) : (
+                        <MarketTabs supported_trade_types={supported_automation_trade_types} />
+                    )}
 
                     {/* Live spot + last digit for digit trade types (no chart here). */}
                     {isDigitTradeType(contract_type) && <CurrentSpot />}

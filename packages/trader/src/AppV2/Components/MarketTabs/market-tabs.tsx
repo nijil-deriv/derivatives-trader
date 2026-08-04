@@ -61,6 +61,7 @@ const MarketTabs = observer(({ supported_trade_types, onSelectorOpenChange }: TM
         addOpenMarket,
         removeOpenMarket,
         replaceOpenMarket,
+        setAutomationSupportedTradeTypes,
         selectMarketAndTradeType,
         setReplacingMarket,
         is_market_selector_open,
@@ -176,6 +177,15 @@ const MarketTabs = observer(({ supported_trade_types, onSelectorOpenChange }: TM
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // In a filtered mode (e.g. Automate), hand the supported set to the store so its tab-strip writer
+    // guards every add against it (an unsupported trade type can never enter or persist) and drops any
+    // unsupported tab already carried over/restored. Without this such a tab renders permanently
+    // disabled — and a disabled tab can never be active, so its remove "×" never shows and it can't be
+    // closed. The seed effect below then keeps a supported market active if this removed the active one.
+    useEffect(() => {
+        if (supported_trade_types?.size) setAutomationSupportedTradeTypes(supported_trade_types);
+    }, [supported_trade_types, setAutomationSupportedTradeTypes]);
 
     // In a filtered mode (e.g. Automate), keep the strip on a usable market when the active market's
     // trade type isn't supported: first hop to the most-recent tradeable tab (leaving disabled tabs
