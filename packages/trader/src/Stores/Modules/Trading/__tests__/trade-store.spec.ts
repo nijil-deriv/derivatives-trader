@@ -5,6 +5,7 @@ import { dayjs, findSymbolForTradeType, TRADE_TYPES, WS } from '@deriv/shared';
 import { mockStore } from '@deriv/stores';
 
 import { TRADE_PANEL_TABS } from 'AppV2/Components/AutomationPanel/automation-config';
+import { OPEN_MARKETS_STORAGE_KEYS, TOpenMarket } from 'AppV2/Utils/open-markets-utils';
 import { TRootStore } from 'Types';
 
 import { ContractType } from '../Helpers/contract-type';
@@ -1333,6 +1334,69 @@ describe('TradeStore', () => {
                 setRunActive(true);
                 expect(tradeStore.is_automation_market_locked).toBe(true);
             });
+        });
+    });
+
+    describe('automation open-markets guard', () => {
+        const rise_market: TOpenMarket = { symbol: 'R_100', contract_type: 'rise_fall' };
+        const turbos_market: TOpenMarket = { symbol: 'R_100', contract_type: 'turboslong' };
+        // Set the mode flags directly (not via setIsAutomationPage) so we exercise the guard in
+        // isolation, without the reconcile-on-mode-switch cascade. `is_automation_mode` is
+        // `is_mobile ? is_automation_page : is_automation_tab`.
+        const setAutomationMode = (on: boolean) => {
+            (tradeStore.root_store.ui as unknown as { is_mobile: boolean }).is_mobile = true;
+            tradeStore.is_automation_page = on;
+        };
+        // setActiveOpenMarkets persists to localStorage — clear it so a written collection can't leak
+        // into a later test's store construction.
+        afterEach(() => {
+            Object.values(OPEN_MARKETS_STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
+        });
+
+        it('setActiveOpenMarkets drops unsupported trade types once the supported set is known', () => {
+            setAutomationMode(true);
+            tradeStore.automation_supported_trade_types = new Set(['rise_fall']);
+            tradeStore.setActiveOpenMarkets([rise_market, turbos_market]);
+            expect(tradeStore.open_markets_automation).toEqual([rise_market]);
+        });
+
+        it('setActiveOpenMarkets passes through unfiltered while the supported set is empty (loading)', () => {
+            setAutomationMode(true);
+            tradeStore.automation_supported_trade_types = new Set();
+            tradeStore.setActiveOpenMarkets([rise_market, turbos_market]);
+            expect(tradeStore.open_markets_automation).toEqual([rise_market, turbos_market]);
+        });
+
+        it('matches on contract_type, not symbol (guards against a wrong-field regression)', () => {
+            setAutomationMode(true);
+            // Both tabs share a symbol; only the supported contract_type must survive.
+            tradeStore.automation_supported_trade_types = new Set(['rise_fall']);
+            tradeStore.setActiveOpenMarkets([turbos_market, rise_market]);
+            expect(tradeStore.open_markets_automation).toEqual([rise_market]);
+        });
+
+        it('setAutomationSupportedTradeTypes flushes existing unsupported tabs in automation mode', () => {
+            setAutomationMode(true);
+            tradeStore.open_markets_automation = [rise_market, turbos_market];
+            tradeStore.setAutomationSupportedTradeTypes(new Set(['rise_fall']));
+            expect(tradeStore.open_markets_automation).toEqual([rise_market]);
+        });
+
+        it('setAutomationSupportedTradeTypes does not flush the strip outside automation mode', () => {
+            setAutomationMode(false);
+            tradeStore.open_markets_automation = [rise_market, turbos_market];
+            tradeStore.setAutomationSupportedTradeTypes(new Set(['rise_fall']));
+            expect(tradeStore.open_markets_automation).toEqual([rise_market, turbos_market]);
+        });
+
+        it('setAutomationSupportedTradeTypes is a no-op when the same Set reference is passed', () => {
+            setAutomationMode(true);
+            const set = new Set(['rise_fall']);
+            tradeStore.automation_supported_trade_types = set;
+            const spy = jest.spyOn(tradeStore, 'setActiveOpenMarkets');
+            tradeStore.setAutomationSupportedTradeTypes(set);
+            expect(spy).not.toHaveBeenCalled();
+            spy.mockRestore();
         });
     });
 

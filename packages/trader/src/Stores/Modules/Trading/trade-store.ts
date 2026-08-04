@@ -278,8 +278,10 @@ export default class TradeStore extends BaseStore {
     open_markets_automation: TOpenMarket[] = readOpenMarkets('automation');
     // Trade types automation supports (resolved from server strategies, set by the automation tab
     // strip once loaded). While non-empty AND in automation mode, `setActiveOpenMarkets` filters the
-    // automation collection to these — a true add-time guard so an unsupported pair can never enter or persist in the strip. Plain field: read at write time, no reactivity
-    // needed. Empty = not loaded yet (no filtering).
+    // automation collection to these — a true add-time guard so an unsupported pair can never enter
+    // or persist in the strip.
+    // Plain field (not observable): read at write time, no reactivity needed. Empty = not loaded yet
+    // (filtering is off until then).
     automation_supported_trade_types: Set<string> = new Set();
     // Per-mode memory of the last active (symbol, contract_type). The store keeps a single active
     // symbol/contract_type. On switch we snapshot the mode we leave and
