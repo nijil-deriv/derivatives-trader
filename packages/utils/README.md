@@ -11,7 +11,7 @@ The `@deriv/utils` package provides a focused collection of utility functions sp
 - **Account Management**: Utilities for handling user accounts and authentication tokens
 - **Storage Operations**: Safe localStorage access with JSON parsing capabilities
 - **Chat Integration**: Intercom chat management utilities
-- **Error Logging**: TrackJS integration for error tracking and logging
+- **Error Logging**: PostHog integration for error tracking and logging
 - **Date/Time Utilities**: Moment.js integration with UTC handling
 - **URL Parsing**: External link detection and URL validation
 - **Type Safety**: Full TypeScript support with proper type definitions
@@ -29,7 +29,7 @@ src/
 ├── getLocalStorage.ts                 # Safe localStorage operations
 ├── getToken.ts                        # Authentication token utilities
 ├── chat.ts                           # Intercom chat integration
-├── logging.ts                        # Error logging with TrackJS
+├── logging.ts                        # Error logging with PostHog
 ├── moment.ts                         # Date/time utilities
 └── parse-url.ts                      # URL parsing utilities
 ```
@@ -138,7 +138,7 @@ Chat.clear();
 
 ### logError
 
-TrackJS integration for error tracking:
+Reports errors to PostHog via `@deriv-com/analytics` (emits a `log_error` event):
 
 ```typescript
 import { logError } from '@deriv/utils';

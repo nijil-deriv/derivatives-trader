@@ -9,24 +9,6 @@ inputs:
     description: 'Node environment'
     required: false
     default: 'test'
-  DATADOG_CLIENT_TOKEN:
-    description: 'Datadog client token'
-    required: false
-  DATADOG_APPLICATION_ID:
-    description: 'Datadog application id'
-    required: false
-  DATADOG_CLIENT_TOKEN_LOGS:
-    description: 'Datadog client token for logs'
-    required: false
-  DATADOG_SESSION_REPLAY_SAMPLE_RATE:
-    description: 'Datadog session replay sample rate'
-    required: false
-  DATADOG_SESSION_SAMPLE_RATE:
-    description: 'Datadog session sample rate'
-    required: false
-  DATADOG_SESSION_SAMPLE_RATE_LOGS:
-    description: 'Datadog session sample rate for logs'
-    required: false
   RUDDERSTACK_KEY:
     description: 'Rudderstack key'
     required: false
@@ -35,9 +17,6 @@ inputs:
     required: false
   POSTHOG_HOST:
     description: 'PostHog host URL'
-    required: false
-  TRACKJS_TOKEN:
-    description: 'TrackJS token'
     required: false
   REMOTE_CONFIG_URL:
     description: 'Remote config URL'
@@ -52,13 +31,6 @@ runs:
   - name: Build all packages
     env:
       NODE_ENV: ${{ inputs.NODE_ENV }}
-      DATADOG_APPLICATION_ID: ${{ inputs.DATADOG_APPLICATION_ID }}
-      DATADOG_CLIENT_TOKEN: ${{ inputs.DATADOG_CLIENT_TOKEN }}
-      DATADOG_CLIENT_TOKEN_LOGS: ${{ inputs.DATADOG_CLIENT_TOKEN_LOGS }}
-      DATADOG_SESSION_REPLAY_SAMPLE_RATE: ${{ inputs.DATADOG_SESSION_REPLAY_SAMPLE_RATE }}
-      DATADOG_SESSION_SAMPLE_RATE: ${{ inputs.DATADOG_SESSION_SAMPLE_RATE }}
-      DATADOG_SESSION_SAMPLE_RATE_LOGS: ${{ inputs.DATADOG_SESSION_SAMPLE_RATE_LOGS }}
-      TRACKJS_TOKEN: ${{ inputs.TRACKJS_TOKEN }}
       RUDDERSTACK_KEY: ${{ inputs.RUDDERSTACK_KEY }}
       POSTHOG_KEY: ${{ inputs.POSTHOG_KEY }}
       POSTHOG_HOST: ${{ inputs.POSTHOG_HOST }}

@@ -172,13 +172,13 @@ const cacheTrackEvents = {
             // Log the error to the console as usual
             originalConsoleError.apply(console, args);
 
-            // Create a clean error message without __trackjs_state__
+            // Build a readable error message from the console arguments
             const errorMessage = args
                 .map(arg =>
                     arg && typeof arg === 'object' && 'message' in arg
                         ? (arg as Error).message
                         : typeof arg === 'object'
-                          ? JSON.stringify(arg, (key, value) => (key.startsWith('__trackjs') ? undefined : value))
+                          ? JSON.stringify(arg)
                           : String(arg)
                 )
                 .join(' ');

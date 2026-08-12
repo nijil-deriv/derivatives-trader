@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { TrackJS } from 'trackjs';
+import { Analytics } from '@deriv-com/analytics';
 import ErrorComponent from './index';
 
 class ErrorBoundary extends React.Component {
@@ -9,24 +9,18 @@ class ErrorBoundary extends React.Component {
         this.state = { hasError: false };
     }
     componentDidCatch = (error, info) => {
-        // Track the error with TrackJS
+        // Report the error to PostHog via the analytics wrapper. Wrapped in a
+        // try/catch so reporting can never prevent the fallback UI from rendering.
         try {
-            if (TrackJS.isInstalled()) {
-                // Track the actual error
-                TrackJS.track(error);
-
-                // Log additional context information
-                TrackJS.console.log('Error Boundary - Component Stack:', info.componentStack);
-                TrackJS.console.log('Error Boundary - Store State:', this.props.root_store);
-                TrackJS.console.log('Error Boundary - Error Info:', {
-                    message: error.message,
-                    stack: error.stack,
-                    name: error.name,
-                });
-            }
-        } catch (trackJSError) {
+            Analytics.trackEvent('error_boundary', {
+                message: error.message,
+                name: error.name,
+                stack: error.stack,
+                component_stack: info.componentStack,
+            });
+        } catch (reportingError) {
             // eslint-disable-next-line no-console
-            console.error('Failed to track error with TrackJS:', trackJSError);
+            console.error('Failed to report error to analytics:', reportingError);
         }
 
         this.setState({

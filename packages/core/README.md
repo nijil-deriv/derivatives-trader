@@ -14,7 +14,7 @@ The `@deriv/core` package is the primary application entry point for Deriv's tra
 - **Internationalization**: Multi-language support with `@deriv-com/translations`
 - **Theme System**: Dark/light theme support with `@deriv-com/quill-ui`
 - **Error Handling**: Comprehensive error boundaries and tracking
-- **Analytics Integration**: TrackJS integration for error tracking and analytics
+- **Analytics Integration**: PostHog integration for error tracking and analytics
 
 ## Architecture
 
@@ -247,7 +247,7 @@ The application implements comprehensive error boundaries:
 
 ### Error Tracking
 
-- TrackJS integration for error monitoring
+- PostHog integration for error monitoring (exception autocapture plus explicit error events)
 
 ## Development Guidelines
 

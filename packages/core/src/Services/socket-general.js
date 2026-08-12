@@ -1,4 +1,5 @@
 import { getPropertyValue, getSocketURL, mapErrorMessage } from '@deriv/shared';
+import { Analytics } from '@deriv-com/analytics';
 import { localize } from '@deriv-com/translations';
 
 import WS from './ws-methods';
@@ -38,11 +39,18 @@ const BinarySocketGeneral = (() => {
             const error = new Error('deriv-api: no message received after 30s');
             error.userId = client_store?.loginid;
 
-            window.TrackJS?.console?.error({
-                message: error.message,
-                websocketUrl: getSocketURL(),
-                pendingResponseTypes,
-            });
+            // Wrapped in a try/catch so a reporting failure can never surface as an
+            // unhandled error from this timer callback.
+            try {
+                Analytics.trackEvent('websocket_timeout', {
+                    message: error.message,
+                    websocketUrl: getSocketURL(),
+                    pendingResponseTypes,
+                });
+            } catch (reportingError) {
+                // eslint-disable-next-line no-console
+                console.error('Failed to report error to analytics:', reportingError);
+            }
         }, 30000);
 
         if (is_ready) {

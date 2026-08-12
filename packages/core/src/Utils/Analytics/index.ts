@@ -1,8 +1,6 @@
 import FIREBASE_INIT_DATA from '@deriv/api/src/remote_config.json';
 import { Analytics } from '@deriv-com/analytics';
 
-import initDatadog from 'Utils/Datadog';
-
 import { FeatureFlags, isFeatureFlags } from '../../types/feature-flags';
 
 /**
@@ -63,6 +61,7 @@ export const AnalyticsInitializer = async () => {
                 allowedDomains?: string[];
                 config?: {
                     api_host?: string;
+                    capture_exceptions?: boolean;
                 };
             };
         } = {};
@@ -74,19 +73,16 @@ export const AnalyticsInitializer = async () => {
         if (hasPostHog) {
             config.posthogOptions = {
                 apiKey: process.env.POSTHOG_KEY!,
-                ...(process.env.POSTHOG_HOST && {
-                    config: {
+                config: {
+                    // Capture uncaught runtime errors automatically, replacing DataDog RUM's error collection.
+                    capture_exceptions: true,
+                    ...(process.env.POSTHOG_HOST && {
                         api_host: process.env.POSTHOG_HOST,
-                    },
-                }),
+                    }),
+                },
             };
         }
 
         await Analytics?.initialise(config);
-    }
-
-    // Initialize DataDog if enabled (synchronous call)
-    if (flags.tracking_datadog) {
-        initDatadog(true);
     }
 };

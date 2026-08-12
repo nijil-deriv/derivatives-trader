@@ -4,7 +4,6 @@ declare global {
     interface Window {
         Analytics: any;
         dataLayer: object[];
-        DD_RUM: object | undefined;
         DerivAppChannel?: DerivAppChannel;
         DerivInterCom: {
             initialize: (config: IntercomConfig) => void;

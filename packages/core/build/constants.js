@@ -130,19 +130,12 @@ const plugins = ({ base, is_test_env }) => {
     return [
         new Dotenv({ systemvars: true }),
         new DefinePlugin({
-            'process.env.DATADOG_APPLICATION_ID': JSON.stringify(process.env.DATADOG_APPLICATION_ID),
-            'process.env.DATADOG_CLIENT_TOKEN': JSON.stringify(process.env.DATADOG_CLIENT_TOKEN),
-            'process.env.DATADOG_SESSION_REPLAY_SAMPLE_RATE': JSON.stringify(
-                process.env.DATADOG_SESSION_REPLAY_SAMPLE_RATE
-            ),
-            'process.env.DATADOG_SESSION_SAMPLE_RATE': JSON.stringify(process.env.DATADOG_SESSION_SAMPLE_RATE),
             'process.env.REF_NAME': JSON.stringify(process.env.REF_NAME),
             'process.env.RUDDERSTACK_KEY': JSON.stringify(process.env.RUDDERSTACK_KEY),
             'process.env.POSTHOG_KEY': JSON.stringify(process.env.POSTHOG_KEY),
             'process.env.POSTHOG_HOST': JSON.stringify(process.env.POSTHOG_HOST),
             'process.env.REMOTE_CONFIG_URL': JSON.stringify(process.env.REMOTE_CONFIG_URL),
             'process.env.R2_PROJECT_NAME': JSON.stringify(process.env.R2_PROJECT_NAME),
-            'process.env.TRACKJS_TOKEN': JSON.stringify(process.env.TRACKJS_TOKEN),
             'process.env.CROWDIN_BRANCH_NAME': JSON.stringify(process.env.CROWDIN_BRANCH_NAME),
             'process.env.CROWDIN_URL': JSON.stringify('https://translations.deriv.com'),
         }),

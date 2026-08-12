@@ -89,7 +89,6 @@
         "workbox-webpack-plugin": "^7.4.0"
     },
     "dependencies": {
-        "@datadog/browser-rum": "^5.11.0",
         "core-js": "^3.47.0",
         "@deriv-com/analytics": "1.42.1",
         "@deriv-com/quill-tokens": "2.0.4",

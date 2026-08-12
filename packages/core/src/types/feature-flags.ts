@@ -12,9 +12,6 @@ export interface FeatureFlags {
     /** Enable/disable RudderStack analytics tracking */
     tracking_rudderstack: boolean;
 
-    /** Enable/disable DataDog RUM tracking */
-    tracking_datadog: boolean;
-
     /** Enable/disable PostHog analytics tracking */
     tracking_posthog: boolean;
 }
@@ -29,7 +26,6 @@ export function isFeatureFlags(obj: any): obj is FeatureFlags {
         typeof obj.cs_chat_intercom === 'boolean' &&
         typeof obj.cs_chat_whatsapp === 'boolean' &&
         typeof obj.tracking_rudderstack === 'boolean' &&
-        typeof obj.tracking_datadog === 'boolean' &&
         typeof obj.tracking_posthog === 'boolean'
     );
 }

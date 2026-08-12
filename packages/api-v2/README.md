@@ -114,7 +114,6 @@ The package provides several domain-specific hooks for common API operations:
 - **Financial Operations**: `useBalance` - Fetch and manage account balance data
 - **Configuration**: `useRemoteConfig` - Access remote configuration settings
 - **System Information**: `useServerTime` - Get server time information
-- **Analytics**: `useTrackJS` - Error tracking and analytics integration
 
 ## Usage Examples
 

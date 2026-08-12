@@ -237,29 +237,6 @@ function ConditionalFeature() {
 }
 ```
 
-#### useTrackJS
-
-For error tracking and analytics:
-
-```tsx
-import { useTrackJS } from '@deriv/api';
-
-function MyComponent() {
-    const { trackError, trackEvent } = useTrackJS();
-
-    const handleAction = () => {
-        try {
-            // Some action
-            trackEvent('user_action', { action: 'button_click' });
-        } catch (error) {
-            trackError(error);
-        }
-    };
-
-    return <button onClick={handleAction}>Action</button>;
-}
-```
-
 ## API Reference
 
 ### Core Hooks
@@ -274,15 +251,14 @@ function MyComponent() {
 
 ### Utility Hooks
 
-| Hook                  | Description                  | Parameters             | Returns               |
-| --------------------- | ---------------------------- | ---------------------- | --------------------- |
-| `useInvalidateQuery`  | Invalidate cached queries    | `()`                   | `(queryKey) => void`  |
-| `useRemoteConfig`     | Access remote configuration  | `()`                   | `QueryResult<Config>` |
-| `useFeatureFlags`     | Feature flag management      | `()`                   | `FeatureFlagsResult`  |
-| `useTrackJS`          | Error tracking and analytics | `()`                   | `TrackingMethods`     |
-| `useIntercom`         | Intercom integration         | `()`                   | `IntercomMethods`     |
-| `useIsRtl`            | RTL language detection       | `()`                   | `boolean`             |
-| `useLocalStorageData` | Local storage utilities      | `(key, defaultValue?)` | `[value, setValue]`   |
+| Hook                  | Description                 | Parameters             | Returns               |
+| --------------------- | --------------------------- | ---------------------- | --------------------- |
+| `useInvalidateQuery`  | Invalidate cached queries   | `()`                   | `(queryKey) => void`  |
+| `useRemoteConfig`     | Access remote configuration | `()`                   | `QueryResult<Config>` |
+| `useFeatureFlags`     | Feature flag management     | `()`                   | `FeatureFlagsResult`  |
+| `useIntercom`         | Intercom integration        | `()`                   | `IntercomMethods`     |
+| `useIsRtl`            | RTL language detection      | `()`                   | `boolean`             |
+| `useLocalStorageData` | Local storage utilities     | `(key, defaultValue?)` | `[value, setValue]`   |
 
 ## Dependencies
 

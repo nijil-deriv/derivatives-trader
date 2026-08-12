@@ -2,8 +2,7 @@
     "cs_chat_intercom": false,
     "cs_chat_whatsapp": false,
     "tracking_rudderstack": true,
-    "tracking_datadog": true,
-    "tracking_posthog": false,
+    "tracking_posthog": true,
     "native_app_allowed_trade_types": {
         "ACCUMULATORS": "Accumulators",
         "VANILLAS": "Vanillas",
