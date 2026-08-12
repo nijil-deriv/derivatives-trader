@@ -1,6 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Analytics } from '@deriv-com/analytics';
+
 import ErrorComponent from './index';
 
 class ErrorBoundary extends React.Component {
